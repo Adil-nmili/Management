@@ -33,7 +33,7 @@ if (isLoading) {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <main className="bg-gray-50 dark:bg-slate-900 h-screen w-full">
+      <main className=" dark:bg-slate-900   min-h-screen w-full">
         <Nav admin={admin} />
         <Outlet />
         <Toaster />

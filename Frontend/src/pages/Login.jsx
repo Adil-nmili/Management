@@ -36,11 +36,10 @@ export default function Login() {
         navigate('/dashboard');
       }
     } catch (error) {
-      console.error('error',error.response.data.message); 
       Swal.fire({
         icon: "error",
         title: "Login Failed",
-        text: "Invalid email or password. Please try again.",
+        text: error.response.data.message,
         confirmButtonColor: "#d33",
       }); 
     }
@@ -48,8 +47,7 @@ export default function Login() {
   }
   return (
     <>
-     
-      <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+      <div className="flex min-h-screen flex-1 flex-col bg-slate-100 justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <h1 className="font-bold text-3xl text-center text-indigo-800" style={{letterSpacing:'2px'}}>NMILI<span className="italic text-black ">Management</span></h1>
           <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">

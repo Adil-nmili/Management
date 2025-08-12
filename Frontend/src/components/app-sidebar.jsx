@@ -12,7 +12,7 @@ import {
   
   import { Link, useLocation } from "react-router-dom";
 
-  import {HOME,ADMINS,CREATEADMIN,EMPLOYEES,CREATEEMPLOYEE,DEPARTMENTS,SERVICES,CREATESERVICE,TASKS, CREATETASK} from '../../routes/Router'
+  import {HOME,MANAGERS,MANAGERCREATE,EMPLOYEES,CREATEEMPLOYEE,DEPARTMENTS,SERVICES,CREATESERVICE,TASKS, CREATETASK} from '../../routes/Router'
   
   import {
     Sidebar,
@@ -79,30 +79,30 @@ import { useAdminContext } from "../../context/AdminContext";
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild>
                       <Link
-                        to={ADMINS}
+                        to={MANAGERS}
                         className={` ${
-                          location.pathname === "/dashboard/admins"
+                          location.pathname === "/dashboard/managers"
                             ? "bg-slate-800 text-gray-100"
                             : ""
                         }`}
                       >
                         <User />
-                        <span>Admins</span>
+                        <span>Managers</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild>
                       <Link
-                        to={CREATEADMIN}
+                        to={MANAGERCREATE}
                         className={` ${
-                          location.pathname === "/dashboard/admins/new"
+                          location.pathname === "/dashboard/managers/new"
                             ? "bg-slate-800 text-gray-100"
                             : ""
                         }`}
                       >
                         <SquarePlus />
-                        <span>New Admin</span>
+                          <span>New Manager</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>

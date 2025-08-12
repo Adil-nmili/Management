@@ -2,7 +2,8 @@ import {Button} from "@/components/ui/button"
 import {AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,AlertDialogAction} from "@/components/ui/alert-dialog"
 import { Link } from "react-router-dom"
 import { toast } from "react-hot-toast"
-
+import { MANAGEREDIT, MANAGERSHOW } from "../../../routes/Router";
+import { Trash, Edit, Eye } from "lucide-react";
 
 export const Admincolumns = [
   {
@@ -14,7 +15,7 @@ export const Admincolumns = [
     header: "Full Name",
   },
   {
-    accessorKey: "position",
+    accessorKey: "role",
     header: "Position",
   },
   {
@@ -27,12 +28,16 @@ export const Admincolumns = [
       const { id } = row.original;
       return (
         <div className="flex gap-2">
-          <Link to={`/admin/${id}/edit`}>
-            <button className="btn btn-sm btn-primary">Edit</button>
+
+          <Link to={`/dashboard/managers/${id}/edit`}>
+            <Button variant={"outline"}><Eye className="w-4 h-4"/></Button>
+          </Link>
+          <Link to={`/dashboard/managers/${id}/edit`}>
+            <Button variant={"outline"}><Edit className="w-4 h-4"/></Button>
           </Link>
           <AlertDialog>
-            <AlertDialogTrigger>
-              <Button variant={"destructive"}>Delete</Button>
+            <AlertDialogTrigger >
+              <Button variant={"destructive"}><Trash className="w-4 h-4"/></Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>

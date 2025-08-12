@@ -26,7 +26,7 @@ export function DataTable({
   })
 
   return (
-    <div className="rounded-md border">
+    <div className="rounded-md border shadow-md">
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -63,7 +63,7 @@ export function DataTable({
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
+                No Managers Found
               </TableCell>
             </TableRow>
           )}

@@ -23,7 +23,8 @@ class User extends Authenticatable
         'password',
         'role',
         'address',
-        'position'
+        'position',
+        'departement_id'
     ];
 
     /**
@@ -31,9 +32,9 @@ class User extends Authenticatable
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function department()
+    public function departement()
     {
-        return $this->belongsTo(Department::class, 'manager_id');
+        return $this->belongsTo(Departement::class, 'departement_id');
     }
 
     /**

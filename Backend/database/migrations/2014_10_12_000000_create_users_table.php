@@ -17,10 +17,10 @@ return new class extends Migration
             $table->string('email',191)->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('role')->enum(['Manager','Employee']);
+            $table->string('role')->enum('role',['Director','Manager','Employee']);
             $table->string('address',190);
             $table->foreignId('departement_id')->nullable()->constrained('departements')->onDelete('set null');
-            $table->string('position');
+            $table->string('position')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
