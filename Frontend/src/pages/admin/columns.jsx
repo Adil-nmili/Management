@@ -4,6 +4,7 @@ import { Link } from "react-router-dom"
 import { toast } from "react-hot-toast"
 import { MANAGEREDIT, MANAGERSHOW } from "../../../routes/Router";
 import { Trash, Edit, Eye } from "lucide-react";
+import User from "../../../services/User";
 
 export const Admincolumns = [
   {
@@ -24,15 +25,15 @@ export const Admincolumns = [
   },
   {
     id: "actions",
-    cell: ({ row }) => {
+    cell: ({ row, setManagers, managers }) => {
       const { id } = row.original;
       return (
         <div className="flex gap-2">
 
-          <Link to={`/dashboard/managers/${id}/edit`}>
+          <Link to={MANAGERSHOW.replace(":id", id)}>
             <Button variant={"outline"}><Eye className="w-4 h-4"/></Button>
           </Link>
-          <Link to={`/dashboard/managers/${id}/edit`}>
+          <Link to={MANAGEREDIT.replace(":id", id)}>
             <Button variant={"outline"}><Edit className="w-4 h-4"/></Button>
           </Link>
           <AlertDialog>
@@ -46,7 +47,7 @@ export const Admincolumns = [
                 </AlertDialogTitle>
                 <AlertDialogDescription>
                   This action cannot be undone. This will permanently delete
-                  your account and remove your data from our servers.
+                  the manager and remove their data from our servers.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
@@ -56,13 +57,13 @@ export const Admincolumns = [
                     const deleteingProgress = toast.loading(
                       "Deleting In Progress...."
                     );
-                    const { data: dataDeleting, status } =
-                      await SizesApi.delete(id);
+                    const { status } =
+                      await User.deleteManager(id);
                     toast.dismiss(deleteingProgress);
                     if (status >= 200 && status < 204) {
-                      setSizes(sizes.filter((size) => size.id !== id));
-                      toast("Category Deleted !!.", {
-                        description: `The Category ${dataDeleting.data.size_name} are deleted successfuly.`,
+                      setManagers(managers.filter((manager) => manager.id !== id));
+                      toast("Manager Deleted !!.", {
+                        description: `The Manager ${row.original.name} is deleted successfully.`,
                         icon: <Trash />,
                       });
                     }

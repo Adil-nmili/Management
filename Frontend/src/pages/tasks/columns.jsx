@@ -2,10 +2,9 @@ import {Button} from "@/components/ui/button"
 import {AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,AlertDialogAction} from "@/components/ui/alert-dialog"
 import { Link } from "react-router-dom"
 import { toast } from "react-hot-toast"
-import { MANAGEREDIT, MANAGERSHOW } from "../../../routes/Router";
+import { TASKEDIT, TASKSHOW } from "../../../routes/Router";
 import { Trash, Edit, Eye } from "lucide-react";
 import Task from "../../../services/Task";
-import { useState } from "react";
 
 export const Taskcolumns = [
   {
@@ -54,16 +53,15 @@ export const Taskcolumns = [
   },
   {
     id: "actions",
-    cell: ({ row }) => {
+    cell: ({ row, setTasks, tasks }) => {
       const { id } = row.original;
-      const [data, setData] = useState([]);
       return (
         <div className="flex gap-2">
 
-          <Link to={`/dashboard/tasks/${id}/edit`}>
+          <Link to={TASKSHOW.replace(":id", id)}>
             <Button variant={"outline"}><Eye className="w-4 h-4"/></Button>
           </Link>
-          <Link to={`/dashboard/tasks/${id}/edit`}>
+          <Link to={TASKEDIT.replace(":id", id)}>
             <Button variant={"outline"}><Edit className="w-4 h-4"/></Button>
           </Link>
           <AlertDialog>
@@ -77,7 +75,7 @@ export const Taskcolumns = [
                 </AlertDialogTitle>
                 <AlertDialogDescription>
                   This action cannot be undone. This will permanently delete
-                  your account and remove your data from our servers.
+                  the task and remove its data from our servers.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
@@ -87,13 +85,13 @@ export const Taskcolumns = [
                     const deleteingProgress = toast.loading(
                       "Deleting In Progress...."
                     );
-                    const { data: dataDeleting, status } =
+                    const { status } =
                       await Task.delete(id);
                     toast.dismiss(deleteingProgress);
                     if (status >= 200 && status < 204) {
-                        setData(data.filter((task) => task.id !== id));
+                        setTasks(tasks.filter((task) => task.id !== id));
                       toast("Task Deleted !!.", {
-                        description: `The Task ${dataDeleting.data.title} are deleted successfuly.`,
+                        description: `The Task ${row.original.title} is deleted successfully.`,
                         icon: <Trash />,
                       });
                     }

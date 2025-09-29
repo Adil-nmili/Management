@@ -19,7 +19,7 @@ useEffect(() => {
   } else {
     navigator("/"); 
   }
-},[authenticate,isLoading])
+},[authenticate, navigator])
 
 if (isLoading) {
   return (

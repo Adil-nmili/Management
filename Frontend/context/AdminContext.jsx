@@ -1,14 +1,14 @@
-import { createContext, useContext, useEffect, useState } from "react"
+import { createContext, useContext, useState } from  "react"
 import User from "../services/User"
 
 
 export const LoginContext = createContext({
-    login : (payload) =>{},
+    login : () => {},
     logout : () => {},
     admin : null,
     setAdmin : () => {},
     authenticate : false,
-    setAuthenticated : () =>{}
+    setAuthenticated : () => {}
 
 })
 

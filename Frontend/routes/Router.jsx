@@ -25,15 +25,23 @@ export const MANAGERSHOW = '/dashboard/managers/show/:id'
 // Employees
 export const EMPLOYEES = '/dashboard/employees'
 export const CREATEEMPLOYEE = '/dashboard/employees/create'
+export const EMPLOYEEEDIT = '/dashboard/employees/:id/edit'
+export const EMPLOYEESHOW = '/dashboard/employees/show/:id'
 // Departements
 export const DEPARTMENTS = '/dashboard/departments'
 export const CREATEDEPARTMENT = '/dashboard/departments/create'
+export const DEPARTMENTEDIT = '/dashboard/departments/:id/edit'
+export const DEPARTMENTSOW = '/dashboard/departments/show/:id'
 // Tasks
 export const TASKS = '/dashboard/tasks'
 export const CREATETASK = '/dashboard/tasks/create'
+export const TASKEDIT = '/dashboard/tasks/:id/edit'
+export const TASKSHOW = '/dashboard/tasks/show/:id'
 // Services
 export const SERVICES = '/dashboard/services'
-export const CREATESERVICE = '/dashboard/services/create'
+// export const CREATESERVICE = '/dashboard/services/create'
+export const SERVICEEDIT = '/dashboard/services/:id/edit'
+export const SERVICESHOW = '/dashboard/services/show/:id'
 
  const Router = createBrowserRouter([
     {
@@ -80,10 +88,10 @@ export const CREATESERVICE = '/dashboard/services/create'
                 path : SERVICES,
                 element : <Services />
             },
-            {
-                path : CREATESERVICE,
-                element : <ServiceCreate />
-            },
+            // {
+            //     path : CREATESERVICE,
+            //     element : <ServiceCreate />
+            // },
             
         ]
     },

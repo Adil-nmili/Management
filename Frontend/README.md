@@ -1,12 +1,54 @@
-# React + Vite
+# Frontend Setup
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This directory contains the React frontend for the Management System project.
 
-Currently, two official plugins are available:
+## Table of Contents
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Running the Development Server](#running-the-development-server)
+- [Building for Production](#building-for-production)
 
-## Expanding the ESLint configuration
+## Installation
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+1.  **Navigate to the Frontend directory:**
+    ```bash
+    cd Frontend
+    ```
+
+2.  **Install npm dependencies:**
+    ```bash
+    npm install
+    # or yarn install
+    ```
+
+## Configuration
+
+1.  **Environment Variables:**
+    Create a `.env` file in the `Frontend` directory based on `.env.example`.
+    ```bash
+    cp .env.example .env
+    ```
+    Ensure the `VITE_BACKEND_URL` variable points to your backend API:
+    ```
+    VITE_BACKEND_URL=http://localhost:8000
+    ```
+    (Adjust the URL if your backend is running on a different address or port.)
+
+## Running the Development Server
+
+To start the frontend development server:
+```bash
+npm run dev
+# or yarn dev
+```
+The application will be accessible at `http://localhost:3000` (or the port configured in `vite.config.js`).
+
+## Building for Production
+
+To build the frontend for production:
+```bash
+npm run build
+# or yarn build
+```
+This will create a `dist` directory containing the optimized production build of your application.

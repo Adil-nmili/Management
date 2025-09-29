@@ -4,7 +4,6 @@ import {
     ListTodo,
     LogOut,
     Send,
-    ShoppingCart,
     SquarePlus,
     User,
     Users,
@@ -12,7 +11,7 @@ import {
   
   import { Link, useLocation } from "react-router-dom";
 
-  import {HOME,MANAGERS,MANAGERCREATE,EMPLOYEES,CREATEEMPLOYEE,DEPARTMENTS,SERVICES,CREATESERVICE,TASKS, CREATETASK} from '../../routes/Router'
+  import {HOME,MANAGERS,MANAGERCREATE,EMPLOYEES,CREATEEMPLOYEE,DEPARTMENTS,SERVICES,TASKS, CREATETASK} from '../../routes/Router'
   
   import {
     Sidebar,
@@ -32,7 +31,7 @@ import { useAdminContext } from "../../context/AdminContext";
   export function AppSidebar() {
     const location = useLocation();
 
-   const { logout } = useAdminContext();
+   const { logout, admin } = useAdminContext();
     const handleLogout = () =>{
       logout();
     }
@@ -71,178 +70,173 @@ import { useAdminContext } from "../../context/AdminContext";
                 </SidebarMenu>
               </SidebarGroupContent>
             </SidebarGroup>
-            <SidebarGroup>
-              <SidebarGroupLabel>Admins</SidebarGroupLabel>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
-                      <Link
-                        to={MANAGERS}
-                        className={` ${
-                          location.pathname === "/dashboard/managers"
-                            ? "bg-slate-800 text-gray-100"
-                            : ""
-                        }`}
-                      >
-                        <User />
-                        <span>Managers</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
-                      <Link
-                        to={MANAGERCREATE}
-                        className={` ${
-                          location.pathname === "/dashboard/managers/new"
-                            ? "bg-slate-800 text-gray-100"
-                            : ""
-                        }`}
-                      >
-                        <SquarePlus />
-                          <span>New Manager</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
-            {/* ////////////////////////// */}
-            <SidebarGroup>
-              <SidebarGroupLabel>Tasks</SidebarGroupLabel>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
-                      <Link
-                        to={TASKS}
-                        className={` ${
-                          location.pathname === "/dashboard/tasks"
-                            ? "bg-slate-800 text-gray-100"
-                            : ""
-                        }`}
-                      >
-                        <ListTodo />
-                        <span>Tasks</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
-                      <Link
-                        to={CREATETASK}
-                        className={` ${
-                          location.pathname === "/dashboard/tasks/new"
-                            ? "bg-slate-800 text-gray-100"
-                            : ""
-                        }`}
-                      >
-                        <SquarePlus />
-                        <span>New Task</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
-            <SidebarGroup>
-              <SidebarGroupLabel>Employees</SidebarGroupLabel>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
-                      <Link
-                        to={EMPLOYEES}
-                        className={` ${
-                          location.pathname === "/dashboard/employees"
-                            ? "bg-slate-800 text-gray-100"
-                            : ""
-                        }`}
-                      >
-                        <Users />
-                        <span>Employees</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                  {/* <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
-                      <Link
-                        to={CREATEEMPLOYEE}
-                        className={` ${
-                          location.pathname === "/dashboard/employees/new"
-                            ? "bg-slate-800 text-gray-100"
-                            : ""
-                        }`}
-                      >
-                        <SquarePlus />
-                        <span>Employees</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem> */}
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
-            <SidebarGroup>
-              <SidebarGroupLabel>Orders</SidebarGroupLabel>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
-                      <Link
-                        to={DEPARTMENTS}
-                        className={` ${
-                          location.pathname === "/dashboard/departments"
-                            ? "bg-slate-800 text-gray-100"
-                            : ""
-                        }`}
-                      >
-                        <ArrowDownUp />
-                        <span>Departements</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
-            <SidebarGroup>
-              <SidebarGroupLabel>Services</SidebarGroupLabel>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
-                      <Link
-                        to={SERVICES}
-                        className={` ${
-                          location.pathname === "/dashboard/services"
-                            ? "bg-slate-800 text-gray-100"
-                            : ""
-                        }`}
-                      >
-                        <Send />
-                        <span>Services</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
-                      <Link
-                        to={CREATESERVICE}
-                        className={` ${
-                          location.pathname === "/dashboard/services/new"
-                            ? "bg-slate-800 text-gray-100"
-                            : ""
-                        }`}
-                      >
-                        <SquarePlus />
-                        <span>Service</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
+            {admin?.role === 'Director' && (
+              <SidebarGroup>
+                <SidebarGroupLabel>Admins</SidebarGroupLabel>
+                <SidebarGroupContent>
+                  <SidebarMenu>
+                    
+                    <SidebarMenuItem>
+                      <SidebarMenuButton asChild>
+                        <Link
+                          to={MANAGERS}
+                          className={` ${
+                            location.pathname === "/dashboard/managers"
+                              ? "bg-slate-800 text-gray-100"
+                              : ""
+                          }`}
+                        >
+                          <User />
+                          <span>Managers</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                    <SidebarMenuItem>
+                      <SidebarMenuButton asChild>
+                        <Link
+                          to={MANAGERCREATE}
+                          className={` ${
+                            location.pathname === "/dashboard/managers/new"
+                              ? "bg-slate-800 text-gray-100"
+                              : ""
+                          }`}
+                        >
+                          <SquarePlus />
+                            <span>New Manager</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  </SidebarMenu>
+                </SidebarGroupContent>
+              </SidebarGroup>
+            )}
+            {(admin?.role === 'Director' || admin?.role === 'Manager' || admin?.role === 'Employee') && (
+              <SidebarGroup>
+                <SidebarGroupLabel>Tasks</SidebarGroupLabel>
+                <SidebarGroupContent>
+                  <SidebarMenu>
+                    <SidebarMenuItem>
+                      <SidebarMenuButton asChild>
+                        <Link
+                          to={TASKS}
+                          className={` ${
+                            location.pathname === "/dashboard/tasks"
+                              ? "bg-slate-800 text-gray-100"
+                              : ""
+                          }`}
+                        >
+                          <ListTodo />
+                          <span>Tasks</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                    <SidebarMenuItem>
+                      <SidebarMenuButton asChild>
+                        <Link
+                          to={CREATETASK}
+                          className={` ${
+                            location.pathname === "/dashboard/tasks/new"
+                              ? "bg-slate-800 text-gray-100"
+                              : ""
+                          }`}
+                        >
+                          <SquarePlus />
+                          <span>New Task</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  </SidebarMenu>
+                </SidebarGroupContent>
+              </SidebarGroup>
+            )}
+            {(admin?.role === 'Director' || admin?.role === 'Manager') && (
+              <SidebarGroup>
+                <SidebarGroupLabel>Employees</SidebarGroupLabel>
+                <SidebarGroupContent>
+                  <SidebarMenu>
+                    <SidebarMenuItem>
+                      <SidebarMenuButton asChild>
+                        <Link
+                          to={EMPLOYEES}
+                          className={` ${
+                            location.pathname === "/dashboard/employees"
+                              ? "bg-slate-800 text-gray-100"
+                              : ""
+                          }`}
+                        >
+                          <Users />
+                          <span>Employees</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                    {/* <SidebarMenuItem>
+                      <SidebarMenuButton asChild>
+                        <Link
+                          to={CREATEEMPLOYEE}
+                          className={` ${
+                            location.pathname === "/dashboard/employees/new"
+                              ? "bg-slate-800 text-gray-100"
+                              : ""
+                          }`}
+                        >
+                          <SquarePlus />
+                          <span>Employees</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem> */}
+                  </SidebarMenu>
+                </SidebarGroupContent>
+              </SidebarGroup>
+            )}
+            {(admin?.role === 'Director' || admin?.role === 'Manager') && (
+              <SidebarGroup>
+                <SidebarGroupLabel>Departments</SidebarGroupLabel>
+                <SidebarGroupContent>
+                  <SidebarMenu>
+                    <SidebarMenuItem>
+                      <SidebarMenuButton asChild>
+                        <Link
+                          to={DEPARTMENTS}
+                          className={` ${
+                            location.pathname === "/dashboard/departments"
+                              ? "bg-slate-800 text-gray-100"
+                              : ""
+                          }`}
+                        >
+                          <ArrowDownUp />
+                          <span>Departments</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  </SidebarMenu>
+                </SidebarGroupContent>
+              </SidebarGroup>
+            )}
+            {(admin?.role === 'Director' || admin?.role === 'Manager' || admin?.role === 'Employee') && (
+              <SidebarGroup>
+                <SidebarGroupLabel>Services</SidebarGroupLabel>
+                <SidebarGroupContent>
+                  <SidebarMenu>
+                    <SidebarMenuItem>
+                      <SidebarMenuButton asChild>
+                        <Link
+                          to={SERVICES}
+                          className={` ${
+                            location.pathname === "/dashboard/services"
+                              ? "bg-slate-800 text-gray-100"
+                              : ""
+                          }`}
+                        >
+                          <Send />
+                          <span>Services</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                    
+                  </SidebarMenu>
+                </SidebarGroupContent>
+              </SidebarGroup>
+            )}
           </SidebarContent>
           <SidebarFooter className="pb-4">
             <Button onClick={handleLogout}>
@@ -254,4 +248,3 @@ import { useAdminContext } from "../../context/AdminContext";
       </div>
     );
   }
-  

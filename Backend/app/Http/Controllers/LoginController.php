@@ -41,4 +41,10 @@ class LoginController extends Controller
         $user = User::create($request->all());
         return response()->json($user, 201);
     }
+
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+        return response()->json(['message' => 'Logged out successfully'], 200);
+    }
 }

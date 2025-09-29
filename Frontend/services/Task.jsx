@@ -8,14 +8,16 @@ const Task = {
   getAll: async () => {
     return axiosClient.get('/api/tasks')
   },
+  getTask: async (id) => {
+    return axiosClient.get(`/api/tasks/${id}`)
+  },
   create: async (payload) => {
-    return axiosClient.post('/api/tasks', payload)
-      .then((response) => {
-        return response.data
-      })
-      .catch((error) => {
-        return error.response.data
-      })
+    try {
+      const response = await axiosClient.post('/api/tasks', payload);
+      return response.data;
+    } catch (error) {
+      throw error.response.data;
+    }
   },
   delete: async (id) => {
     return axiosClient.delete(`/api/tasks/${id}`)

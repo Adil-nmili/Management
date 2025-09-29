@@ -29,7 +29,16 @@ class DirectorController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|min:8',
+            'address' => 'required',
+            'position' => 'required',
+        ]);
+
+        $director = User::create(array_merge($request->all(), ['role' => 'Director']));
+        return response()->json($director, 201);
     }
 
     /**
@@ -37,15 +46,8 @@ class DirectorController extends Controller
      */
     public function show(string $id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+        $director = User::where('role', 'Director')->where('id', $id)->firstOrFail();
+        return response()->json($director, 200);
     }
 
     /**
@@ -53,7 +55,16 @@ class DirectorController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email,'.$id,
+            'address' => 'required',
+            'position' => 'required',
+        ]);
+
+        $director = User::where('role', 'Director')->where('id', $id)->firstOrFail();
+        $director->update($request->all());
+        return response()->json($director, 200);
     }
 
     /**
@@ -61,6 +72,8 @@ class DirectorController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $director = User::where('role', 'Director')->where('id', $id)->firstOrFail();
+        $director->delete();
+        return response()->json(['message' => 'Director deleted successfully'], 200);
     }
 }

@@ -32,12 +32,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // Auth
 Route::post('/login', [LoginController::class,'login']);
 Route::post('/register', [LoginController::class,'register']);
+Route::post('/logout', [LoginController::class,'logout'])->middleware('auth:sanctum');
 
 // Resource
 Route::resource('/managers', ManagerController::class);
 Route::resource('/employees', EmployeeController::class);
 Route::resource('/directors', DirectorController::class);
 
-Route::resource('/service', ServiceController::class);
+Route::resource('/services', ServiceController::class);
 Route::resource('/tasks', TaskController::class);
 Route::resource('/departements', DepartementController::class);
+Route::resource('/positions', PositionController::class);

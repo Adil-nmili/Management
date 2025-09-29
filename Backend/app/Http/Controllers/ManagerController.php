@@ -29,7 +29,16 @@ class ManagerController extends Controller
      */
     public function store(Request $request)
     {
-        $manager = User::create($request->all());
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|min:8',
+            'address' => 'required',
+            'position' => 'required',
+            'departement_id' => 'required|exists:departements,id'
+        ]);
+
+        $manager = User::create(array_merge($request->all(), ['role' => 'Manager']));
         return response()->json($manager, 201);
     }
 
@@ -38,17 +47,7 @@ class ManagerController extends Controller
      */
     public function show(string $id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit($id)
-    {
-        
-
-        $manager = User::find($id);
+        $manager = User::where('role', 'Manager')->where('id', $id)->with('departement')->firstOrFail();
         return response()->json($manager, 200);
     }
 
@@ -57,7 +56,17 @@ class ManagerController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email,'.$id,
+            'address' => 'required',
+            'position' => 'required',
+            'departement_id' => 'required|exists:departements,id'
+        ]);
+
+        $manager = User::where('role', 'Manager')->where('id', $id)->firstOrFail();
+        $manager->update($request->all());
+        return response()->json($manager, 200);
     }
 
     /**
@@ -65,6 +74,8 @@ class ManagerController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $manager = User::where('role', 'Manager')->where('id', $id)->firstOrFail();
+        $manager->delete();
+        return response()->json(['message' => 'Manager deleted successfully'], 200);
     }
 }

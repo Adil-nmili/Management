@@ -12,7 +12,7 @@ class PositionController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json(Position::all(), 200);
     }
 
     /**
@@ -28,7 +28,13 @@ class PositionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'departement_id' => 'required|exists:departements,id'
+        ]);
+
+        $position = Position::create($request->all());
+        return response()->json($position, 201);
     }
 
     /**
@@ -36,7 +42,7 @@ class PositionController extends Controller
      */
     public function show(Position $position)
     {
-        //
+        return response()->json($position, 200);
     }
 
     /**
@@ -52,7 +58,13 @@ class PositionController extends Controller
      */
     public function update(Request $request, Position $position)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'departement_id' => 'required|exists:departements,id'
+        ]);
+
+        $position->update($request->all());
+        return response()->json($position, 200);
     }
 
     /**
@@ -60,6 +72,7 @@ class PositionController extends Controller
      */
     public function destroy(Position $position)
     {
-        //
+        $position->delete();
+        return response()->json(['message' => 'Position deleted successfully'], 200);
     }
 }

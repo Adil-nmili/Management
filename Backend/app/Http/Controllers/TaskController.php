@@ -42,7 +42,7 @@ class TaskController extends Controller
             'attachments' => 'required|string',
         ]);
         $task = Task::create($request->all());
-            return response()->json(['message' => 'Task created successfully'], 201);
+            return response()->json($task, 201);
     }
 
     /**
@@ -50,16 +50,6 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
-        $task = Task::find($task);
-        return response()->json($task, 200);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Task $task)
-    {
-        $task = Task::find($task);
         return response()->json($task, 200);
     }
 
@@ -80,7 +70,6 @@ class TaskController extends Controller
             'notes' => 'required|string',
             'attachments' => 'required|string',
         ]);
-        $task = Task::find($task);
         $task->update($request->all());
         return response()->json(['message' => 'Task updated successfully'], 200);
     }
@@ -90,7 +79,6 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
-        $task = Task::find($task);
         $task->delete();
         return response()->json(['message' => 'Task deleted successfully'], 200);
     }

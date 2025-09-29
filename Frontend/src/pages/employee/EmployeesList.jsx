@@ -21,7 +21,7 @@ const EmployeesList = () => {
     <div>
       <div className="mt-10 w-4/5 mx-auto shad">
 
-      <EmployeeDataTable columns={Employeecolumns} data={data} />
+      <EmployeeDataTable columns={Employeecolumns} data={data} setEmployees={setData} employees={data} />
       </div>
     </div>
   )

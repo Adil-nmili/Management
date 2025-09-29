@@ -6,7 +6,7 @@ const Departement =  {
   getCSRFToken : async () => {
     return await axiosClient.get('/sanctum/csrf-cookie')
   },
-  getManager : async () => {
+  getManagers : async () => {
     return await axiosClient.get('/api/managers')
   },
   create: async (payload) => {
@@ -20,6 +20,9 @@ const Departement =  {
   },
   getAll: async () => {
     return axiosClient.get('/api/departements')
+  },
+  getDepartement: async (id) => {
+    return axiosClient.get(`/api/departements/${id}`)
   }
 }
 

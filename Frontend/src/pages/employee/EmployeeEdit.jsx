@@ -1,53 +1,69 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { managerSchema } from "../../../validation/managerSchema";
+import { employeeSchema } from "../../../validation/employeeSchema";
 import User from "../../../services/User";
 import Departement from "../../../services/Departement";
-import { MANAGERS } from "../../../routes/Router";
+import { EMPLOYEES } from "../../../routes/Router";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Loader } from "lucide-react";
 
-const ManagerCreate = () => {
+const EmployeeEdit = () => {
   const navigate = useNavigate();
+  const { id } = useParams();
   const [departments, setDepartments] = useState([]);
   const [loadingDepartments, setLoadingDepartments] = useState(true);
+  const [loadingEmployee, setLoadingEmployee] = useState(true);
 
-  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm({
-    resolver: zodResolver(managerSchema),
+  const { register, handleSubmit, setValue, formState: { errors, isSubmitting } } = useForm({
+    resolver: zodResolver(employeeSchema),
   });
 
   useEffect(() => {
-    const fetchDepartments = async () => {
+    const fetchData = async () => {
       try {
-        const response = await Departement.getAll();
-        setDepartments(response.data);
+        const [departmentsResponse, employeeResponse] = await Promise.all([
+          Departement.getAll(),
+          User.getEmployee(id),
+        ]);
+
+        setDepartments(departmentsResponse.data);
+        const employeeData = employeeResponse.data;
+
+        // Pre-fill form fields
+        setValue("name", employeeData.name);
+        setValue("email", employeeData.email);
+        // Password fields are typically not pre-filled for security reasons
+        setValue("address", employeeData.address);
+        setValue("position", employeeData.position);
+        setValue("departement_id", String(employeeData.departement_id));
       } catch (error) {
-        toast.error("Failed to fetch departments.");
+        toast.error("Failed to fetch data.");
+        console.error(error);
       } finally {
         setLoadingDepartments(false);
+        setLoadingEmployee(false);
       }
     };
-    fetchDepartments();
-  }, []);
+    fetchData();
+  }, [id, setValue]);
 
   const onSubmit = async (data) => {
     try {
-      await User.createManager(data);
-      toast.success("Manager created successfully!");
-      navigate(MANAGERS);
+      await User.updateEmployee(id, data);
+      toast.success("Employee updated successfully!");
+      navigate(EMPLOYEES);
     } catch (error) {
-      console.error(error);
-      toast.error(error.response?.data?.message || "Failed to create manager.");
+      toast.error(error.response?.data?.message || "Failed to update employee.");
     }
   };
 
-  if (loadingDepartments) {
+  if (loadingDepartments || loadingEmployee) {
     return (
       <div className="flex justify-center items-center h-screen">
         <Loader className="animate-spin h-10 w-10 text-blue-500" />
@@ -58,7 +74,7 @@ const ManagerCreate = () => {
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="px-8 py-6 mt-4 text-left bg-white shadow-lg rounded-lg w-full max-w-md">
-        <h3 className="text-2xl font-bold text-center">Create New Manager</h3>
+        <h3 className="text-2xl font-bold text-center">Edit Employee</h3>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-4">
           <div>
             <Label htmlFor="name">Name</Label>
@@ -70,14 +86,15 @@ const ManagerCreate = () => {
             <Input id="email" type="email" placeholder="Email" {...register("email")} />
             {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
           </div>
+          {/* Password fields are typically not pre-filled for security reasons, and should be optional for update */}
           <div>
-            <Label htmlFor="password">Password</Label>
-            <Input id="password" type="password" placeholder="Password" {...register("password")} />
+            <Label htmlFor="password">New Password (optional)</Label>
+            <Input id="password" type="password" placeholder="New Password" {...register("password")} />
             {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
           </div>
           <div>
-            <Label htmlFor="password_confirmation">Confirm Password</Label>
-            <Input id="password_confirmation" type="password" placeholder="Confirm Password" {...register("password_confirmation")} />
+            <Label htmlFor="password_confirmation">Confirm New Password</Label>
+            <Input id="password_confirmation" type="password" placeholder="Confirm New Password" {...register("password_confirmation")} />
             {errors.password_confirmation && <p className="text-red-500 text-sm">{errors.password_confirmation.message}</p>}
           </div>
           <div>
@@ -92,7 +109,7 @@ const ManagerCreate = () => {
           </div>
           <div>
             <Label htmlFor="departement_id">Department</Label>
-            <Select onValueChange={(value) => register("departement_id").onChange({ target: { value } })}>
+            <Select onValueChange={(value) => setValue("departement_id", value)} value={register("departement_id").value}>
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select a department" />
               </SelectTrigger>
@@ -105,7 +122,7 @@ const ManagerCreate = () => {
             {errors.departement_id && <p className="text-red-500 text-sm">{errors.departement_id.message}</p>}
           </div>
           <Button type="submit" className="w-full" disabled={isSubmitting}>
-            {isSubmitting ? <Loader className="animate-spin" /> : "Create Manager"}
+            {isSubmitting ? <Loader className="animate-spin" /> : "Update Employee"}
           </Button>
         </form>
       </div>
@@ -113,4 +130,4 @@ const ManagerCreate = () => {
   );
 };
 
-export default ManagerCreate;
+export default EmployeeEdit;

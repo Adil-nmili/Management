@@ -32,11 +32,13 @@ class DepartementController extends Controller
      */
     public function store(Request $request)
     {
-        Departement::create([
-            'name' => $request->name,
-            'manager_id' => $request->manager_id
+        $request->validate([
+            'name' => 'required',
+            'manager_id' => 'required|exists:users,id'
         ]);
-         return response()->json('The departement has added successfuly', 200);
+
+        $departement = Departement::create($request->all());
+        return response()->json($departement, 201);
     }
 
     /**
@@ -44,7 +46,8 @@ class DepartementController extends Controller
      */
     public function show(Departement $departement)
     {
-        //
+        $departement->load(relations: 'manager')->loadCount(['employees']);
+        return response()->json($departement, 200);
     }
 
     /**
@@ -60,7 +63,13 @@ class DepartementController extends Controller
      */
     public function update(Request $request, Departement $departement)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'manager_id' => 'required|exists:users,id'
+        ]);
+
+        $departement->update($request->all());
+        return response()->json($departement, 200);
     }
 
     /**
@@ -68,6 +77,7 @@ class DepartementController extends Controller
      */
     public function destroy(Departement $departement)
     {
-        //
+        $departement->delete();
+        return response()->json(['message' => 'Departement deleted successfully'], 200);
     }
 }

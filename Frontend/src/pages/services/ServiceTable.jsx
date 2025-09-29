@@ -8,7 +8,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useEffect, useState } from "react";
-import Departement from "../../../services/Departement";
+import Service from "../../../services/Service";
 import { Loader, Trash, Edit, Eye } from "lucide-react";
 import { toast } from "react-hot-toast";
 import {
@@ -24,18 +24,18 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { DEPARTMENTEDIT, DEPARTMENTSOW } from "../../../routes/Router";
+import { SERVICEEDIT, SERVICESHOW } from "../../../routes/Router";
 
-const DepartmentTable = ({ setDepartements, departments }) => {
+const ServiceTable = ({ setServices, services }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchDepartments = async () => {
+    const fetchServices = async () => {
       try {
-        const response = await Departement.getAll();
+        const response = await Service.getAll();
         if (response.status >= 200 && response.status < 300) {
-          setDepartements(response.data);
+          setServices(response.data);
         }
       } catch (err) {
         setError(err);
@@ -43,19 +43,19 @@ const DepartmentTable = ({ setDepartements, departments }) => {
         setLoading(false);
       }
     };
-    fetchDepartments();
-  }, [setDepartements]);
+    fetchServices();
+  }, [setServices]);
 
   const handleDelete = async (id, name) => {
     const deletingProgress = toast.loading("Deleting In Progress....");
     try {
-      await Departement.delete(id);
+      await Service.delete(id);
       toast.dismiss(deletingProgress);
-      setDepartements(departments.filter((dept) => dept.id !== id));
-      toast.success(`Department ${name} deleted successfully!`);
+      setServices(services.filter((service) => service.id !== id));
+      toast.success(`Service ${name} deleted successfully!`);
     } catch (error) {
       toast.dismiss(deletingProgress);
-      toast.error(error.response?.data?.message || "Failed to delete department.");
+      toast.error(error.response?.data?.message || "Failed to delete service.");
     }
   };
 
@@ -77,29 +77,27 @@ const DepartmentTable = ({ setDepartements, departments }) => {
 
   return (
     <Table>
-      <TableCaption>A list of available Departments.</TableCaption>
+      <TableCaption>A list of available Services.</TableCaption>
       <TableHeader>
         <TableRow>
           <TableHead className="w-[100px]">ID</TableHead>
           <TableHead>Name</TableHead>
-          <TableHead>Responsible of Department</TableHead>
-          <TableHead className="text-right">Amount of Employees</TableHead>
+          <TableHead>Description</TableHead>
           <TableHead className="text-center">Actions</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {departments.length > 0 ? (
-          departments.map((department) => (
-            <TableRow key={department.id}>
-              <TableCell className="font-medium">{department.id}</TableCell>
-              <TableCell>{department.name}</TableCell>
-              <TableCell>{department.manager.name}</TableCell>
-              <TableCell className="text-end">{department.employees_count}</TableCell>
+        {services.length > 0 ? (
+          services.map((service) => (
+            <TableRow key={service.id}>
+              <TableCell className="font-medium">{service.id}</TableCell>
+              <TableCell>{service.name}</TableCell>
+              <TableCell>{service.description}</TableCell>
               <TableCell className="flex justify-center gap-2">
-                <Link to={DEPARTMENTSOW.replace(":id", department.id)}>
+                <Link to={SERVICESHOW.replace(":id", service.id)}>
                   <Button variant={"outline"}><Eye className="w-4 h-4"/></Button>
                 </Link>
-                <Link to={DEPARTMENTEDIT.replace(":id", department.id)}>
+                <Link to={SERVICEEDIT.replace(":id", service.id)}>
                   <Button variant={"outline"}><Edit className="w-4 h-4"/></Button>
                 </Link>
                 <AlertDialog>
@@ -113,13 +111,13 @@ const DepartmentTable = ({ setDepartements, departments }) => {
                       </AlertDialogTitle>
                       <AlertDialogDescription>
                         This action cannot be undone. This will permanently delete
-                        the department and remove its data from our servers.
+                        the service and remove its data from our servers.
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                       <AlertDialogCancel>Cancel</AlertDialogCancel>
                       <AlertDialogAction
-                        onClick={() => handleDelete(department.id, department.name)}
+                        onClick={() => handleDelete(service.id, service.name)}
                       >
                         Delete
                       </AlertDialogAction>
@@ -131,7 +129,7 @@ const DepartmentTable = ({ setDepartements, departments }) => {
           ))
         ) : (
           <TableRow>
-            <TableCell colSpan="5" className="text-center">No Departments Found</TableCell>
+            <TableCell colSpan="4" className="text-center">No Services Found</TableCell>
           </TableRow>
         )}
       </TableBody>
@@ -139,4 +137,4 @@ const DepartmentTable = ({ setDepartements, departments }) => {
   );
 };
 
-export default DepartmentTable;
+export default ServiceTable;

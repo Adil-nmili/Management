@@ -14,6 +14,9 @@ const Service =  {
   getAll: async () => {
     return axiosClient.get('/api/services')
   },
+  getService: async (id) => {
+    return axiosClient.get(`/api/services/${id}`)
+  },
   delete: async (id) => {
     return axiosClient.delete(`/api/services/${id}`)
   }

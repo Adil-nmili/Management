@@ -7,12 +7,18 @@ const User =  {
   login : async (payload) => {
     return axiosClient.post('/api/login',payload)
   },
+  register : async (payload) => {
+    return axiosClient.post('/api/register',payload)
+  },
+  logout : async () => {
+    return axiosClient.post('/api/logout')
+  },
   // Managers
   getManagers : async () => {
     return axiosClient.get('/api/managers')
   },
   getManager : async (id) => {
-    return axiosClient.get(`/api/managers/${id}/edit`)
+    return axiosClient.get(`/api/managers/${id}`)
   },
   createManager : async (payload) => {
     return axiosClient.post('/api/managers',payload)

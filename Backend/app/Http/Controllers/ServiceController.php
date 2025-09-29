@@ -12,7 +12,7 @@ class ServiceController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json(Service::all(), 200);
     }
 
     /**
@@ -28,7 +28,13 @@ class ServiceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'description' => 'nullable'
+        ]);
+
+        $service = Service::create($request->all());
+        return response()->json($service, 201);
     }
 
     /**
@@ -36,7 +42,7 @@ class ServiceController extends Controller
      */
     public function show(Service $service)
     {
-        //
+        return response()->json($service, 200);
     }
 
     /**
@@ -52,7 +58,13 @@ class ServiceController extends Controller
      */
     public function update(Request $request, Service $service)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'description' => 'nullable'
+        ]);
+
+        $service->update($request->all());
+        return response()->json($service, 200);
     }
 
     /**
@@ -60,6 +72,7 @@ class ServiceController extends Controller
      */
     public function destroy(Service $service)
     {
-        //
+        $service->delete();
+        return response()->json(['message' => 'Service deleted successfully'], 200);
     }
 }

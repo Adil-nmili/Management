@@ -1,17 +1,18 @@
-import { taskSchema } from "../../../validation/taskSchema"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-hot-toast";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { taskSchema } from "../../../validation/taskSchema";
+import User from "../../../services/User";
+import Task from "../../../services/Task";
+import { TASKS } from "../../../routes/Router";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { Loader } from "lucide-react";
 import {
   Form,
   FormControl,
@@ -20,19 +21,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
-import User from "../../../services/User"
-import { useEffect, useState } from "react"
-import Task from "../../../services/Task"
-import { toast } from "react-hot-toast"
-import { useNavigate } from "react-router-dom"
-import { TASKS } from "../../../routes/Router"
-import { Loader } from "lucide-react"
 
-const TaskCreate = () => {
-  const navigate = useNavigate()
-  const [employees, setEmployees] = useState([])
-  const [loadingEmployees, setLoadingEmployees] = useState(true)
-  const [errorEmployees, setErrorEmployees] = useState(null)
+const TaskEdit = () => {
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const [employees, setEmployees] = useState([]);
+  const [loadingEmployees, setLoadingEmployees] = useState(true);
+  const [loadingTask, setLoadingTask] = useState(true);
 
   const form = useForm({
     resolver: zodResolver(taskSchema),
@@ -40,62 +35,70 @@ const TaskCreate = () => {
       title: "",
       description: "",
       employee_id: "",
-      status: "pending",
+      status: "",
       start_date: "",
       end_date: "",
-      priority: "low",
+      priority: "",
       progress: 0,
       notes: "",
       attachments: "",
     },
-  })
+  });
 
   useEffect(() => {
-    const fetchEmployees = async () => {
+    const fetchData = async () => {
       try {
-        const response = await User.getEmployees()
-        if (response.status >= 200 && response.status < 300) {
-          setEmployees(response.data)
-        }
-      } catch (err) {
-        setErrorEmployees(err)
-        toast.error("Failed to fetch employees.")
+        const [employeesResponse, taskResponse] = await Promise.all([
+          User.getEmployees(),
+          Task.getTask(id),
+        ]);
+
+        setEmployees(employeesResponse.data);
+        const taskData = taskResponse.data;
+
+        // Pre-fill form fields
+        form.setValue("title", taskData.title);
+        form.setValue("description", taskData.description);
+        form.setValue("employee_id", String(taskData.employee_id));
+        form.setValue("status", taskData.status);
+        form.setValue("start_date", taskData.start_date);
+        form.setValue("end_date", taskData.end_date);
+        form.setValue("priority", taskData.priority);
+        form.setValue("progress", taskData.progress);
+        form.setValue("notes", taskData.notes);
+        form.setValue("attachments", taskData.attachments);
+      } catch (error) {
+        toast.error("Failed to fetch data.");
+        console.error(error);
       } finally {
-        setLoadingEmployees(false)
+        setLoadingEmployees(false);
+        setLoadingTask(false);
       }
-    }
-    fetchEmployees()
-  }, [])
+    };
+    fetchData();
+  }, [id, form.setValue, form]);
 
   const onSubmit = async (data) => {
     try {
-      await Task.create(data)
-      toast.success("Task created successfully!")
-      navigate(TASKS)
+      await Task.update(id, data);
+      toast.success("Task updated successfully!");
+      navigate(TASKS);
     } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to create task.")
+      toast.error(error.response?.data?.message || "Failed to update task.");
     }
-  }
+  };
 
-  if (loadingEmployees) {
+  if (loadingEmployees || loadingTask) {
     return (
       <div className="flex justify-center items-center h-screen">
         <Loader className="animate-spin h-10 w-10 text-blue-500" />
       </div>
-    )
-  }
-
-  if (errorEmployees) {
-    return (
-      <div className="flex justify-center items-center h-screen text-red-500">
-        Error: {errorEmployees.message}
-      </div>
-    )
+    );
   }
 
   return (
     <div className="max-w-2xl mx-auto p-6">
-      <h1 className="text-2xl font-semibold mb-6">Create Task</h1>
+      <h1 className="text-2xl font-semibold mb-6">Edit Task</h1>
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -134,7 +137,7 @@ const TaskCreate = () => {
               <FormItem>
                 <FormLabel>Employee</FormLabel>
                 <FormControl>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select onValueChange={field.onChange} value={field.value}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select employee" />
                     </SelectTrigger>
@@ -160,7 +163,7 @@ const TaskCreate = () => {
                 <FormItem>
                   <FormLabel>Status</FormLabel>
                   <FormControl>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select onValueChange={field.onChange} value={field.value}>
                       <SelectTrigger>
                         <SelectValue placeholder="Select status" />
                       </SelectTrigger>
@@ -183,7 +186,7 @@ const TaskCreate = () => {
                 <FormItem>
                   <FormLabel>Priority</FormLabel>
                   <FormControl>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select onValueChange={field.onChange} value={field.value}>
                       <SelectTrigger>
                         <SelectValue placeholder="Select priority" />
                       </SelectTrigger>
@@ -277,13 +280,13 @@ const TaskCreate = () => {
               Reset
             </Button>
             <Button type="submit" disabled={form.formState.isSubmitting}>
-              {form.formState.isSubmitting ? <Loader className="animate-spin" /> : "Create Task"}
+              {form.formState.isSubmitting ? <Loader className="animate-spin" /> : "Update Task"}
             </Button>
           </div>
         </form>
       </Form>
     </div>
-  )
-}
+  );
+};
 
-export default TaskCreate
+export default TaskEdit;

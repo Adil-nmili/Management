@@ -1,8 +1,11 @@
 import DeparetemnentForm from "./DeparetemnentForm";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import DepartmentTable from "./DepartmentTable";
+import { useState } from "react";
 
 const Departemants = () => {
+  const [departments, setDepartements] = useState([]);
+
   return (
     <div className="flex flex-col items-center gap-10 my-10">
       <div>
@@ -20,7 +23,7 @@ const Departemants = () => {
           <TabsTrigger value="add-new">Add-New-One</TabsTrigger>
         </TabsList>
         <TabsContent value="departments">
-          <DepartmentTable />
+          <DepartmentTable departments={departments} setDepartements={setDepartements} />
         </TabsContent>
         <TabsContent value="add-new">
           <DeparetemnentForm />

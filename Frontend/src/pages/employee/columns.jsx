@@ -2,8 +2,9 @@ import {Button} from "@/components/ui/button"
 import {AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,AlertDialogAction} from "@/components/ui/alert-dialog"
 import { Link } from "react-router-dom"
 import { toast } from "react-hot-toast"
-import { MANAGEREDIT, MANAGERSHOW } from "../../../routes/Router";
+import { EMPLOYEEEDIT, EMPLOYEESHOW } from "../../../routes/Router";
 import { Trash, Edit, Eye } from "lucide-react";
+import User from "../../../services/User";
 
 export const Employeecolumns = [
   {
@@ -24,15 +25,15 @@ export const Employeecolumns = [
   },
   {
     id: "actions",
-    cell: ({ row }) => {
+    cell: ({ row, setEmployees, employees }) => {
       const { id } = row.original;
       return (
         <div className="flex gap-2">
 
-          <Link to={`/dashboard/managers/${id}/edit`}>
+          <Link to={EMPLOYEESHOW.replace(":id", id)}>
             <Button variant={"outline"}><Eye className="w-4 h-4"/></Button>
           </Link>
-          <Link to={`/dashboard/managers/${id}/edit`}>
+          <Link to={EMPLOYEEEDIT.replace(":id", id)}>
             <Button variant={"outline"}><Edit className="w-4 h-4"/></Button>
           </Link>
           <AlertDialog>
@@ -46,7 +47,7 @@ export const Employeecolumns = [
                 </AlertDialogTitle>
                 <AlertDialogDescription>
                   This action cannot be undone. This will permanently delete
-                  your account and remove your data from our servers.
+                  the employee and remove their data from our servers.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
@@ -56,13 +57,13 @@ export const Employeecolumns = [
                     const deleteingProgress = toast.loading(
                       "Deleting In Progress...."
                     );
-                    const { data: dataDeleting, status } =
-                      await SizesApi.delete(id);
+                    const { status } =
+                      await User.deleteEmployee(id);
                     toast.dismiss(deleteingProgress);
                     if (status >= 200 && status < 204) {
-                      setSizes(sizes.filter((size) => size.id !== id));
-                      toast("Category Deleted !!.", {
-                        description: `The Category ${dataDeleting.data.size_name} are deleted successfuly.`,
+                      setEmployees(employees.filter((employee) => employee.id !== id));
+                      toast("Employee Deleted !!.", {
+                        description: `The Employee ${row.original.name} is deleted successfully.`,
                         icon: <Trash />,
                       });
                     }
