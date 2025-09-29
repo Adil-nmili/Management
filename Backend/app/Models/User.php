@@ -38,6 +38,16 @@ class User extends Authenticatable
     }
 
     /**
+     * The tasks that this user has.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function tasks()
+    {
+        return $this->hasMany(Task::class, 'employee_id');
+    }
+
+    /**
      * The attributes that should be hidden for serialization.
      *
      * @var array<int, string>

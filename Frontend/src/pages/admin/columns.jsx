@@ -19,7 +19,7 @@ export const Admincolumns = [
     header: "Position",
   },
   {
-    accessorKey: "departement",
+    accessorKey: "departement.name",
     header: "Departement",
   },
   {

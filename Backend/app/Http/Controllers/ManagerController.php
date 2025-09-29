@@ -12,7 +12,7 @@ class ManagerController extends Controller
      */
     public function index()
     {
-        $managers = User::where('role', 'Manager')->get();
+        $managers = User::where('role', 'Manager')->with('departement')->get();
         return response()->json($managers, 200);
     }
 

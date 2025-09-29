@@ -9,7 +9,13 @@ const Task = {
     return axiosClient.get('/api/tasks')
   },
   create: async (payload) => {
-    return axiosClient.post('/api/tasks',payload)
+    return axiosClient.post('/api/tasks', payload)
+      .then((response) => {
+        return response.data
+      })
+      .catch((error) => {
+        return error.response.data
+      })
   },
   delete: async (id) => {
     return axiosClient.delete(`/api/tasks/${id}`)

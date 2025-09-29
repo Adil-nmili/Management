@@ -166,7 +166,7 @@ import { useAdminContext } from "../../context/AdminContext";
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
-                  <SidebarMenuItem>
+                  {/* <SidebarMenuItem>
                     <SidebarMenuButton asChild>
                       <Link
                         to={CREATEEMPLOYEE}
@@ -180,7 +180,7 @@ import { useAdminContext } from "../../context/AdminContext";
                         <span>Employees</span>
                       </Link>
                     </SidebarMenuButton>
-                  </SidebarMenuItem>
+                  </SidebarMenuItem> */}
                 </SidebarMenu>
               </SidebarGroupContent>
             </SidebarGroup>

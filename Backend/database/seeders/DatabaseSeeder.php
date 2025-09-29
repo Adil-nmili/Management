@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -15,11 +16,15 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
-        \App\Models\User::factory()->createMany([
+        // Ensure clean state for deterministic seeding
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        DB::table('tasks')->truncate();
+        DB::table('positions')->truncate();
+        DB::table('departements')->truncate();
+        DB::table('users')->truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
+        $users = [
             ['name' => 'Adil Nmili',
             'email' => 'adil@email.com',
             'role' => 'Director',
@@ -38,6 +43,30 @@ class DatabaseSeeder extends Seeder
             'password'=> Hash::make('yassine2025'),
             'address' =>'Tamslouht',
             'position' => 'employee']
+        ];
+
+        foreach ($users as $user) {
+            \App\Models\User::updateOrCreate(['email' => $user['email']], $user);
+        }
+
+        $this->runTasks();
+    }
+    public function runTasks()
+    {
+        \App\Models\Task::insert([
+            ['title' => 'Task 1', 'description' => 'Task 1 description', 'employee_id' => 1, 'status' => 'pending', 'start_date' => '2025-01-01', 'end_date' => '2025-01-01', 'priority' => 'low', 'progress' => 0, 'notes' => 'Task 1 notes', 'attachments' => 'Task 1 attachments'],
+            ['title' => 'Task 2', 'description' => 'Task 2 description', 'employee_id' => 2, 'status' => 'pending', 'start_date' => '2025-01-01', 'end_date' => '2025-01-01', 'priority' => 'low', 'progress' => 0, 'notes' => 'Task 2 notes', 'attachments' => 'Task 2 attachments'],
+            ['title' => 'Task 3', 'description' => 'Task 3 description', 'employee_id' => 3, 'status' => 'pending', 'start_date' => '2025-01-01', 'end_date' => '2025-01-01', 'priority' => 'low', 'progress' => 0, 'notes' => 'Task 3 notes', 'attachments' => 'Task 3 attachments'],
+        ]);
+        \App\Models\Departement::insert([
+            ['name' => 'Departement 1', 'manager_id' => 1],
+            ['name' => 'Departement 2', 'manager_id' => 2],
+            ['name' => 'Departement 3', 'manager_id' => 3],
+        ]);
+        \App\Models\Position::insert([
+            ['name' => 'Position 1', 'description' => 'Position 1 description', 'departement_id' => 1],
+            ['name' => 'Position 2', 'description' => 'Position 2 description', 'departement_id' => 2],
+            ['name' => 'Position 3', 'description' => 'Position 3 description', 'departement_id' => 3],
         ]);
     }
 }

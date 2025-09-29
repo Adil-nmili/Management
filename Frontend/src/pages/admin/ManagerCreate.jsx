@@ -20,8 +20,17 @@ import User from "../../../services/User";
 import { useNavigate } from "react-router-dom";
 import { MANAGERS } from "../../../routes/Router";
 
+
+
+const positions = [
+  { id: 1, name: "Manager" },
+  { id: 2, name: "Supervisor" },
+  { id: 3, name: "Employee" },
+]
+
 const ManagerCreate = () => {
   const [departements, setDepartements] = useState([]);
+  
   const navigate = useNavigate();
 
   const {
@@ -76,7 +85,7 @@ const ManagerCreate = () => {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold my-10 text-center underline">Manager Create</h1>
+      <h1 className="text-2xl font-bold my-10 text-center underline">Create User</h1>
 
       <form
         onSubmit={handleSubmit(onSubmit)}
@@ -133,8 +142,23 @@ const ManagerCreate = () => {
           {errors.departement_id && <p className="text-red-500 text-sm">{errors.departement_id.message}</p>}
         </div>
         <div className="flex flex-col gap-2">
-          <Label>Role:</Label>
-          <Input value="Manager" disabled {...register("role")} />
+          <Label>Position:</Label>
+          <Select
+            onValueChange={(val) => setValue("role", val)}
+            defaultValue=""
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select a position" />
+            </SelectTrigger>
+            <SelectContent>
+              {positions.map((p) => (
+                <SelectItem key={p.id} value={p.name}>
+                  {p.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          {errors.role && <p className="text-red-500 text-sm">{errors.role.message}</p>}
         </div>
         <Button className="col-span-2" type="submit">Create</Button>
       </form>

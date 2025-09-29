@@ -12,7 +12,8 @@ class TaskController extends Controller
      */
     public function index()
     {
-        //
+        $tasks = Task::with('employee')->get();
+        return response()->json($tasks, 200);
     }
 
     /**
@@ -28,7 +29,20 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'employee_id' => 'required|exists:users,id',
+            'status' => 'required|string|max:255',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after:start_date',
+            'priority' => 'required|string|max:255',
+            'progress' => 'required|integer|min:0|max:100',
+            'notes' => 'required|string',
+            'attachments' => 'required|string',
+        ]);
+        $task = Task::create($request->all());
+            return response()->json(['message' => 'Task created successfully'], 201);
     }
 
     /**
@@ -36,7 +50,8 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
-        //
+        $task = Task::find($task);
+        return response()->json($task, 200);
     }
 
     /**
@@ -44,7 +59,8 @@ class TaskController extends Controller
      */
     public function edit(Task $task)
     {
-        //
+        $task = Task::find($task);
+        return response()->json($task, 200);
     }
 
     /**
@@ -52,7 +68,21 @@ class TaskController extends Controller
      */
     public function update(Request $request, Task $task)
     {
-        //
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'employee_id' => 'required|exists:users,id',
+            'status' => 'required|string|max:255',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after:start_date',
+            'priority' => 'required|string|max:255',
+            'progress' => 'required|integer|min:0|max:100',
+            'notes' => 'required|string',
+            'attachments' => 'required|string',
+        ]);
+        $task = Task::find($task);
+        $task->update($request->all());
+        return response()->json(['message' => 'Task updated successfully'], 200);
     }
 
     /**
@@ -60,6 +90,8 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
-        //
+        $task = Task::find($task);
+        $task->delete();
+        return response()->json(['message' => 'Task deleted successfully'], 200);
     }
 }

@@ -10,6 +10,7 @@ const Managers = () => {
   useEffect(() => {
     const fetchData = async () => {
       const response = await User.getManagers();
+          console.log(response.data);
       setData(response.data);
     };
     fetchData();

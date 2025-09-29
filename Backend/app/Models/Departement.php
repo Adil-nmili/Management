@@ -24,13 +24,18 @@ class Departement extends Model
         return $this->belongsTo(User::class, 'manager_id');
     }
 
-    /**
-     * Get all the employees of the department.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
+    // /**
+    //  * Get all the employees of the department.
+    //  *
+    //  * @return \Illuminate\Database\Eloquent\Relations\HasMany
+    //  */
     public function employees()
     {
-        return $this->hasMany(User::class)->where('role', 'employee');
+        return $this->hasMany(User::class)->where('role', 'Employee');
+    }
+
+    public function users()
+    {
+        return $this->hasMany(User::class);
     }
 }
